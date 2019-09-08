@@ -1,78 +1,57 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
-class MyApp extends StatelessWidget{
+void main() => runApp(new MaterialApp(
+  home: new MyApp(),
+));
+
+class MyApp extends StatefulWidget{
+  @override
+  MyState  createState()  => new MyState();
+
+}
+
+class MyState extends State<MyApp>{
+  bool _isCheck = false;
+
+  void onChange(bool value){
+    setState(() {
+      _isCheck = value ;
+    });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final String appTitle = "Text Input With Validation.";
     // TODO: implement build
-    return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: MyCustomForm(),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text("Check Box Example"),
       ),
-    );
-  }
-
-}
-// Create a Form widget.
-class MyCustomForm extends StatefulWidget{
-  @override
-  MyCustomFormState  createState() {
-    // TODO: implement createState
-    return MyCustomFormState();
-  }
-}
-
-// Create a corresponding State class.
-// This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm>{
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
-  final _formKey = GlobalKey<FormState>();
-  @override
-  Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            validator: (value){
-              if(value.isEmpty){
-                return "Please enter some text";
-              }else{
-                return null;
-              }
-            },
+      body: new Container(
+        padding: new EdgeInsets.all(30.0),
+        child: new Center(
+          child: new Column(
+            children: <Widget>[
+             new Row(
+               children: <Widget>[
+                 new Text("Click It"),
+                 new Checkbox(value: _isCheck, onChanged: (bool value){onChange(value);}),
+               ],
+             ),
+              new CheckboxListTile(
+                title: new Text("Click Here"),
+                  value: _isCheck,
+                  onChanged: (bool value){
+                    onChange(value);
+                  })
+            ],
 
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: RaisedButton(
-              onPressed: (){
-                if(_formKey.currentState.validate()){
-                  Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data'),
-                  )
-                  );
-                }
-              },
-              child: Text('Submit'),
-            ),
-
-          ),
-        ],
-        
         ),
+      ),
+
     );
   }
 
 }
-
